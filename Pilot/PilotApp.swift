@@ -10,11 +10,18 @@ import SwiftUI
 @main
 struct PilotApp: App {
     @StateObject private var appState = AppState()
+    @StateObject private var revenueCat = RevenueCatService.shared
+
+    init() {
+        // Configure RevenueCat on app launch
+        RevenueCatService.shared.configure()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
+                .environmentObject(revenueCat)
                 .preferredColorScheme(.dark)
                 .onAppear {
                     appState.initialize()

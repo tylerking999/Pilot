@@ -2,15 +2,21 @@
 //  PaywallView.swift
 //  PILOT
 //
-//  Subscription paywall - ported from app/paywall.tsx
+//  Subscription paywall with RevenueCat integration
 //
 
 import SwiftUI
+import RevenueCat
 
 struct PaywallView: View {
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var revenueCat: RevenueCatService
     @Environment(\.dismiss) var dismiss
+
     @State private var isAnnual: Bool = true // Annual selected by default (better value)
+    @State private var isPurchasing = false
+    @State private var errorMessage: String?
+    @State private var selectedPackage: Package?
 
     var body: some View {
         NavigationStack {
@@ -93,16 +99,36 @@ struct PaywallView: View {
                         // Subscribe Button
                         VStack(spacing: AppTheme.Spacing.sm) {
                             Button(action: subscribe) {
-                                Text("Start Free Trial")
-                                    .font(AppTheme.Typography.bodyMedium)
-                                    .frame(maxWidth: .infinity)
+                                HStack {
+                                    if isPurchasing {
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    }
+                                    Text(isPurchasing ? "Processing..." : "Start Free Trial")
+                                        .font(AppTheme.Typography.bodyMedium)
+                                }
+                                .frame(maxWidth: .infinity)
                             }
                             .primaryButtonStyle()
+                            .disabled(isPurchasing || revenueCat.currentOffering == nil)
                             .padding(.horizontal)
+
+                            if let error = errorMessage {
+                                Text(error)
+                                    .font(AppTheme.Typography.small)
+                                    .foregroundColor(AppTheme.Colors.error)
+                                    .multilineTextAlignment(.center)
+                            }
 
                             Text("7 days free, then \(isAnnual ? "$59.99/year" : "$7.99/month")")
                                 .font(AppTheme.Typography.caption)
                                 .foregroundColor(AppTheme.Colors.textSecondary)
+
+                            Button("Restore Purchases") {
+                                restorePurchases()
+                            }
+                            .font(AppTheme.Typography.small)
+                            .foregroundColor(AppTheme.Colors.textTertiary)
 
                             Text("Cancel anytime")
                                 .font(AppTheme.Typography.small)
@@ -128,14 +154,76 @@ struct PaywallView: View {
                     }
                 }
             }
+            .onAppear {
+                // Select the appropriate package based on user choice
+                updateSelectedPackage()
+            }
+            .onChange(of: isAnnual) { _, _ in
+                updateSelectedPackage()
+            }
+        }
+    }
+
+    private func updateSelectedPackage() {
+        guard let offering = revenueCat.currentOffering else { return }
+
+        // Find monthly or annual package
+        if isAnnual {
+            // Look for annual package first
+            selectedPackage = offering.annual ?? offering.availablePackages.first { package in
+                package.storeProduct.subscriptionPeriod?.unit == .year
+            }
+        } else {
+            // Look for monthly package
+            selectedPackage = offering.monthly ?? offering.availablePackages.first { package in
+                package.storeProduct.subscriptionPeriod?.unit == .month
+            }
         }
     }
 
     private func subscribe() {
-        // In a real app, this would integrate with StoreKit/RevenueCat
+        guard let package = selectedPackage else {
+            errorMessage = "Unable to load subscription options. Please try again."
+            return
+        }
+
+        isPurchasing = true
+        errorMessage = nil
+
         Task {
-            await appState.setSubscriptionTier(.premium)
-            dismiss()
+            do {
+                let success = try await revenueCat.purchase(package: package)
+                if success {
+                    // Update app state with premium subscription
+                    await appState.setSubscriptionTier(.premium)
+                    dismiss()
+                } else {
+                    errorMessage = "Purchase was not completed."
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            isPurchasing = false
+        }
+    }
+
+    private func restorePurchases() {
+        isPurchasing = true
+        errorMessage = nil
+
+        Task {
+            do {
+                try await revenueCat.restorePurchases()
+                if revenueCat.isSubscribed {
+                    await appState.setSubscriptionTier(.premium)
+                    dismiss()
+                } else {
+                    errorMessage = "No purchases found to restore."
+                }
+            } catch {
+                errorMessage = "Restore failed: \(error.localizedDescription)"
+            }
+            isPurchasing = false
         }
     }
 }
