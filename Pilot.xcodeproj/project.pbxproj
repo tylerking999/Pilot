@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		57DDA42F2EAB9FEF007BF52B /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 57DDA42E2EAB9FEF007BF52B /* RevenueCat */; };
+		57DDA4312EAB9FEF007BF52B /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 57DDA4302EAB9FEF007BF52B /* RevenueCatUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		575CD88F2EAB49DB00124502 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -66,6 +71,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57DDA4312EAB9FEF007BF52B /* RevenueCatUI in Frameworks */,
+				57DDA42F2EAB9FEF007BF52B /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +134,8 @@
 			);
 			name = Pilot;
 			packageProductDependencies = (
+				57DDA42E2EAB9FEF007BF52B /* RevenueCat */,
+				57DDA4302EAB9FEF007BF52B /* RevenueCatUI */,
 			);
 			productName = Pilot;
 			productReference = 575CD8812EAB49DA00124502 /* Pilot.app */;
@@ -210,6 +219,9 @@
 			);
 			mainGroup = 575CD8782EAB49DA00124502;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				57DDA42D2EAB9FEF007BF52B /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 575CD8822EAB49DA00124502 /* Products */;
 			projectDirPath = "";
@@ -589,6 +601,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		57DDA42D2EAB9FEF007BF52B /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.45.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57DDA42E2EAB9FEF007BF52B /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57DDA42D2EAB9FEF007BF52B /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		57DDA4302EAB9FEF007BF52B /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57DDA42D2EAB9FEF007BF52B /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 575CD8792EAB49DA00124502 /* Project object */;
 }
