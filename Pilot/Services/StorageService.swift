@@ -227,18 +227,9 @@ class StorageService {
     }
 
     func canUseVoiceConversation() async throws -> (allowed: Bool, remaining: Int) {
-        let profile = try await getProfile()
-        let limit = profile.subscriptionTier.voiceConversationsPerMonth
-
-        if profile.subscriptionTier == .elite {
-            return (true, -1) // Unlimited
-        }
-
-        let used = profile.voiceCheckInsThisMonth
-        let remaining = max(0, limit - used)
-        let allowed = used < limit
-
-        return (allowed, remaining)
+        // Voice conversations not yet implemented in v1.0
+        // Will be added in future update
+        return (false, 0)
     }
 
     // MARK: - Milestone Checking

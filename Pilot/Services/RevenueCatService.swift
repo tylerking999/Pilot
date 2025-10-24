@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import RevenueCat
 
 @MainActor
@@ -101,12 +102,19 @@ class RevenueCatService: ObservableObject {
                 return nil
             }
 
+            // Determine if annual or monthly based on product identifier
+            let isAnnual = entitlement.productIdentifier.lowercased().contains("annual")
+            let periodType = isAnnual ? "Annual" : "Monthly"
+
+            // Check if in trial period
+            let isInTrial = entitlement.periodType == .trial
+
             return SubscriptionInfo(
                 isActive: true,
                 willRenew: entitlement.willRenew,
-                periodType: entitlement.periodType == .annual ? "Annual" : "Monthly",
+                periodType: periodType,
                 expirationDate: entitlement.expirationDate,
-                isInFreeTrial: entitlement.isInFreeTrial
+                isInFreeTrial: isInTrial
             )
         } catch {
             return nil
