@@ -24,6 +24,9 @@ struct AppTheme {
         static let textSecondary = Color(hex: "#9CA3AF")
         static let textTertiary = Color(hex: "#6B7280")
 
+        // Border
+        static let border = Color(hex: "#374151")
+
         // Mood Colors
         static let drained = Color(hex: "#6B7280")   // Gray
         static let restless = Color(hex: "#EF4444")  // Red

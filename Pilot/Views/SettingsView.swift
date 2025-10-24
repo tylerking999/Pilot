@@ -256,7 +256,7 @@ struct ShareSheet: UIViewControllerRepresentable {
 }
 
 // Make URL Identifiable for sheet
-extension URL: Identifiable {
+extension URL: @retroactive Identifiable {
     public var id: String { self.absoluteString }
 }
 
