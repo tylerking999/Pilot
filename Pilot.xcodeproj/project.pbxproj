@@ -27,11 +27,25 @@
 		575CD8812EAB49DA00124502 /* Pilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		575CD88E2EAB49DB00124502 /* PilotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PilotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		575CD8982EAB49DB00124502 /* PilotUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PilotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		575CD8AB2EAB4A0000124502 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		575CD8AC2EAB4B0000124502 /* Exceptions for "Pilot" folder in "Pilot" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 575CD8802EAB49DA00124502 /* Pilot */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		575CD8832EAB49DA00124502 /* Pilot */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				575CD8AC2EAB4B0000124502 /* Exceptions for "Pilot" folder in "Pilot" target */,
+			);
 			path = Pilot;
 			sourceTree = "<group>";
 		};
@@ -75,6 +89,7 @@
 		575CD8782EAB49DA00124502 = {
 			isa = PBXGroup;
 			children = (
+				575CD8AB2EAB4A0000124502 /* Config.xcconfig */,
 				575CD8832EAB49DA00124502 /* Pilot */,
 				575CD8912EAB49DB00124502 /* PilotTests */,
 				575CD89B2EAB49DB00124502 /* PilotUITests */,
@@ -390,13 +405,15 @@
 		};
 		575CD8A32EAB49DB00124502 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 575CD8AB2EAB4A0000124502 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Pilot/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -421,13 +438,15 @@
 		};
 		575CD8A42EAB49DB00124502 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 575CD8AB2EAB4A0000124502 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Pilot/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

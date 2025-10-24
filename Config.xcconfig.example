@@ -1,0 +1,21 @@
+// Config.xcconfig.example
+// Copy this file to Config.xcconfig and fill in your actual API keys
+// NEVER commit Config.xcconfig to git - it's in .gitignore
+
+// AI Provider Configuration
+AI_PROVIDER = claude
+
+// Anthropic API Key
+ANTHROPIC_API_KEY = your_anthropic_api_key_here
+
+// OpenAI API Key (for Whisper voice transcription)
+OPENAI_API_KEY = your_openai_api_key_here
+
+// ElevenLabs API Key (for voice generation)
+ELEVENLABS_API_KEY = your_elevenlabs_api_key_here
+
+// ElevenLabs Default Voice ID
+ELEVENLABS_VOICE_ID = your_elevenlabs_voice_id_here
+
+// RevenueCat iOS Key
+REVENUECAT_IOS_KEY = your_revenuecat_ios_key_here

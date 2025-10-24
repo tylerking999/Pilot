@@ -1,0 +1,32 @@
+# Xcode
+*.xcuserstate
+*.xcuserdatad
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+build/
+
+# API Keys and Sensitive Configuration
+Config.xcconfig
+Secrets.xcconfig
+.env
+.env.local
+
+# CocoaPods
+Pods/
+*.podspec
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# macOS
+.DS_Store
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output

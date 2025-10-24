@@ -2,16 +2,64 @@
 //  PilotApp.swift
 //  Pilot
 //
-//  Created by Tyler King on 10/23/25.
+//  Main SwiftUI App Entry Point
 //
 
 import SwiftUI
 
 @main
 struct PilotApp: App {
+    @StateObject private var appState = AppState()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
+                .preferredColorScheme(.dark)
+                .onAppear {
+                    appState.initialize()
+                }
         }
     }
+}
+
+struct ContentView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        Group {
+            if !appState.profile.hasCompletedOnboarding {
+                OnboardingView()
+            } else {
+                MainTabView()
+            }
+        }
+    }
+}
+
+struct MainTabView: View {
+    var body: some View {
+        TabView {
+            HomeView()
+                .tabItem {
+                    Label("Today", systemImage: "circle.fill")
+                }
+
+            InsightsView()
+                .tabItem {
+                    Label("Insights", systemImage: "chart.line.uptrend.xyaxis")
+                }
+
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+        }
+        .accentColor(AppTheme.Colors.primary)
+    }
+}
+
+#Preview {
+    ContentView()
+        .environmentObject(AppState())
 }
