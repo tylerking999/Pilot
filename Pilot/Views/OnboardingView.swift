@@ -84,23 +84,36 @@ struct OnboardingView: View {
 // MARK: - Welcome Page
 
 struct WelcomePage: View {
+    @State private var appear = false
+
     var body: some View {
         VStack(spacing: AppTheme.Spacing.xl) {
             Text("✨")
                 .font(.system(size: 80))
+                .scaleEffect(appear ? 1.0 : 0.5)
+                .opacity(appear ? 1 : 0)
 
             Text("Welcome to PILOT")
                 .font(AppTheme.Typography.h1)
                 .foregroundColor(AppTheme.Colors.textPrimary)
                 .multilineTextAlignment(.center)
+                .opacity(appear ? 1 : 0)
+                .offset(y: appear ? 0 : 20)
 
             Text("One meaningful task per day.\nFocus on your clarity.")
                 .font(AppTheme.Typography.body)
                 .foregroundColor(AppTheme.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .lineSpacing(8)
+                .opacity(appear ? 1 : 0)
+                .offset(y: appear ? 0 : 20)
         }
         .padding()
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                appear = true
+            }
+        }
     }
 }
 
@@ -108,16 +121,21 @@ struct WelcomePage: View {
 
 struct NamePage: View {
     @Binding var userName: String
+    @State private var appear = false
 
     var body: some View {
         VStack(spacing: AppTheme.Spacing.xl) {
             Text("👋")
                 .font(.system(size: 80))
+                .scaleEffect(appear ? 1.0 : 0.5)
+                .opacity(appear ? 1 : 0)
 
             Text("What should we call you?")
                 .font(AppTheme.Typography.h2)
                 .foregroundColor(AppTheme.Colors.textPrimary)
                 .multilineTextAlignment(.center)
+                .opacity(appear ? 1 : 0)
+                .offset(y: appear ? 0 : 20)
 
             TextField("Your name", text: $userName)
                 .font(AppTheme.Typography.h3)
@@ -127,8 +145,15 @@ struct NamePage: View {
                 .background(AppTheme.Colors.cardBackground)
                 .cornerRadius(AppTheme.Radius.md)
                 .textFieldStyle(.plain)
+                .opacity(appear ? 1 : 0)
+                .offset(y: appear ? 0 : 20)
         }
         .padding()
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.1)) {
+                appear = true
+            }
+        }
     }
 }
 
@@ -136,36 +161,54 @@ struct NamePage: View {
 
 struct ThemePage: View {
     @Binding var selectedTheme: String
+    @State private var appear = false
 
     let themes = [
-        ("dark", "Dark", "moon.stars.fill"),
-        ("midnight", "Midnight", "moon.fill"),
-        ("purple", "Purple", "sparkles")
+        ("dark", "Classic Dark", "moon.stars.fill", "#6366F1"),
+        ("midnight", "Midnight Blue", "moon.fill", "#3B82F6"),
+        ("purple", "Purple Haze", "sparkles", "#8B5CF6")
     ]
 
     var body: some View {
         VStack(spacing: AppTheme.Spacing.xl) {
             Text("🎨")
                 .font(.system(size: 80))
+                .scaleEffect(appear ? 1.0 : 0.5)
+                .opacity(appear ? 1 : 0)
 
-            Text("Choose your theme")
+            Text("Choose your vibe")
                 .font(AppTheme.Typography.h2)
                 .foregroundColor(AppTheme.Colors.textPrimary)
                 .multilineTextAlignment(.center)
+                .opacity(appear ? 1 : 0)
+                .offset(y: appear ? 0 : 20)
 
             VStack(spacing: AppTheme.Spacing.md) {
-                ForEach(themes, id: \.0) { theme in
+                ForEach(Array(themes.enumerated()), id: \.element.0) { index, theme in
                     ThemeOption(
                         id: theme.0,
                         name: theme.1,
                         icon: theme.2,
+                        accentColor: theme.3,
                         isSelected: selectedTheme == theme.0,
-                        action: { selectedTheme = theme.0 }
+                        action: {
+                            withAnimation(.spring(response: 0.3)) {
+                                selectedTheme = theme.0
+                            }
+                        }
                     )
+                    .opacity(appear ? 1 : 0)
+                    .offset(y: appear ? 0 : 20)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1), value: appear)
                 }
             }
         }
         .padding()
+        .onAppear {
+            withAnimation {
+                appear = true
+            }
+        }
     }
 }
 
@@ -173,37 +216,50 @@ struct ThemeOption: View {
     let id: String
     let name: String
     let icon: String
+    let accentColor: String
     let isSelected: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                    .font(.title2)
+            HStack(spacing: AppTheme.Spacing.md) {
+                // Color preview circle
+                Circle()
+                    .fill(Color(hex: accentColor))
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Image(systemName: icon)
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    )
+
                 Text(name)
                     .font(AppTheme.Typography.bodyMedium)
+
                 Spacer()
+
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(AppTheme.Colors.primary)
+                        .foregroundColor(Color(hex: accentColor))
+                        .font(.title3)
                 }
             }
             .foregroundColor(isSelected ? .white : AppTheme.Colors.textSecondary)
             .padding()
             .background(
                 isSelected
-                    ? AppTheme.Colors.primary.opacity(0.2)
+                    ? Color(hex: accentColor).opacity(0.2)
                     : AppTheme.Colors.cardBackground
             )
             .overlay(
                 RoundedRectangle(cornerRadius: AppTheme.Radius.md)
                     .stroke(
-                        isSelected ? AppTheme.Colors.primary : Color.clear,
+                        isSelected ? Color(hex: accentColor) : Color.clear,
                         lineWidth: 2
                     )
             )
             .cornerRadius(AppTheme.Radius.md)
+            .scaleEffect(isSelected ? 1.02 : 1.0)
         }
         .buttonStyle(PlainButtonStyle())
     }

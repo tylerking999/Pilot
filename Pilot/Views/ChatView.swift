@@ -15,6 +15,7 @@ struct ChatView: View {
     @State private var messageText = ""
     @State private var messages: [ChatMessage] = []
     @State private var isSending = false
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -28,6 +29,14 @@ struct ChatView: View {
 
                     Divider()
                         .background(AppTheme.Colors.textTertiary.opacity(0.3))
+
+                    // Upgrade Banner (if low/no credits)
+                    if appState.profile.subscriptionTier == .free {
+                        UpgradeBanner(
+                            creditsRemaining: appState.profile.chatCredits,
+                            onUpgrade: { showPaywall = true }
+                        )
+                    }
 
                     // Messages
                     ScrollViewReader { proxy in
@@ -69,6 +78,9 @@ struct ChatView: View {
             }
             .onAppear {
                 loadMessages()
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView()
             }
         }
     }
@@ -206,6 +218,58 @@ struct MessageInput: View {
             }
             .padding()
             .background(AppTheme.Colors.background)
+        }
+    }
+}
+
+// MARK: - Upgrade Banner
+
+struct UpgradeBanner: View {
+    let creditsRemaining: Int
+    let onUpgrade: () -> Void
+
+    var body: some View {
+        if creditsRemaining <= 3 {
+            VStack(spacing: AppTheme.Spacing.sm) {
+                HStack {
+                    Image(systemName: creditsRemaining == 0 ? "lock.fill" : "exclamationmark.triangle.fill")
+                        .foregroundColor(creditsRemaining == 0 ? AppTheme.Colors.error : AppTheme.Colors.warning)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(creditsRemaining == 0 ? "Chat limit reached" : "\(creditsRemaining) chats remaining")
+                            .font(AppTheme.Typography.bodyMedium)
+                            .foregroundColor(AppTheme.Colors.textPrimary)
+
+                        Text(creditsRemaining == 0 ? "Upgrade to Premium for unlimited chats" : "Upgrade for unlimited conversations")
+                            .font(AppTheme.Typography.small)
+                            .foregroundColor(AppTheme.Colors.textSecondary)
+                    }
+
+                    Spacer()
+
+                    Button(action: onUpgrade) {
+                        Text("Upgrade")
+                            .font(AppTheme.Typography.small)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(AppTheme.Colors.primary)
+                            .cornerRadius(AppTheme.Radius.full)
+                    }
+                }
+                .padding()
+                .background(
+                    (creditsRemaining == 0 ? AppTheme.Colors.error : AppTheme.Colors.warning).opacity(0.15)
+                )
+                .cornerRadius(AppTheme.Radius.md)
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppTheme.Radius.md)
+                        .stroke(creditsRemaining == 0 ? AppTheme.Colors.error : AppTheme.Colors.warning, lineWidth: 1)
+                )
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
         }
     }
 }

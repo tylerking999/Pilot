@@ -162,7 +162,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppTheme.Colors.textSecondary)
                         }
 
-                        Link(destination: URL(string: "https://tekhub.app/privacy")!) {
+                        Link(destination: URL(string: "https://tylerking999.github.io/Pilot/")!) {
                             HStack {
                                 Text("Privacy Policy")
                                     .foregroundColor(AppTheme.Colors.textPrimary)
@@ -173,7 +173,7 @@ struct SettingsView: View {
                             }
                         }
 
-                        Link(destination: URL(string: "https://tekhub.app/terms")!) {
+                        Link(destination: URL(string: "https://tylerking999.github.io/Pilot/")!) {
                             HStack {
                                 Text("Terms of Service")
                                     .foregroundColor(AppTheme.Colors.textPrimary)
