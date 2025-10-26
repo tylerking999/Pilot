@@ -63,8 +63,16 @@ class RevenueCatService: ObservableObject {
         do {
             let offerings = try await Purchases.shared.offerings()
             currentOffering = offerings.current
+            print("✅ RevenueCat: Fetched offerings successfully")
+            print("   Current offering: \(offerings.current?.identifier ?? "nil")")
+            print("   Available packages: \(offerings.current?.availablePackages.count ?? 0)")
+            if let packages = offerings.current?.availablePackages {
+                for package in packages {
+                    print("   - \(package.identifier): \(package.storeProduct.localizedTitle)")
+                }
+            }
         } catch {
-            print("Error fetching offerings: \(error)")
+            print("❌ RevenueCat: Error fetching offerings: \(error)")
         }
     }
 
